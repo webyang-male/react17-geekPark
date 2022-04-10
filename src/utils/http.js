@@ -5,7 +5,7 @@ import { getToken } from "@/utils";
 import { history } from "./history";
 
 const http = axios.create({
-  baseURL: "http://geek.itheima.net/v1_0",
+  baseURL: "//geek.itheima.net/v1_0",
   timeout: 5000,
 });
 
