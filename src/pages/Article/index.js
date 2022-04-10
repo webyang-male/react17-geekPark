@@ -27,9 +27,6 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const Article = () => {
-  const onFinish = (values) => {
-    message.success(`${values}`);
-  };
 
   //频道列表数据获取
   const [channelList, setChannelList] = useState([]);
@@ -42,22 +39,36 @@ const Article = () => {
     loadChannelList();
   }, []);
 
-  //数据
-  const data = [
-    {
-      id: "8218",
-      comment_count: 0,
-      cover: {
-        images: ["http://geek.itheima.net/resources/images/15.jpg"],
-      },
-      like_count: 0,
-      pubdate: "2022-03-11 09:00:00",
-      read_count: 2,
-      status: 2,
-      title: "wkwebview离线化加载h5资源解决方案",
-    },
-  ];
 
+  //筛选事件
+  const onFinish = (values) => {
+    console.log("values#####", values);
+    const { channel_id, date, status } = values;
+    // 初始化表单数据
+    const _params = {};
+    if (status !== -1) {
+      _params.status = status;
+    }
+    if (channel_id) {
+      _params.channel_id = channel_id;
+    }
+    if (date) {
+      _params.begin_pubdate = date[0].format("YYYY-MM-DD");
+      _params.end_pubdate = date[1].format("YYYY-MM-DD");
+    }
+    // 修改params参数 触发接口再次发起  对象合并是整体覆盖
+    setParams({ ...params, ..._params });
+    message.success("查询成功");
+  };
+
+  //分页组件事件
+  const pageChange = (page) => {
+      setParams({ ...params, page });
+  };
+
+
+
+  //列表项
   const columns = [
     {
       title: "封面",
@@ -66,7 +77,7 @@ const Article = () => {
       render: (cover) => {
         //   console.log(cover);
         return (
-          <img src={cover.images || img404} width={80} height={60} alt="" />
+          <img src={cover.images[0] || img404} width={80} height={60} alt="" />
         );
       },
     },
@@ -114,6 +125,35 @@ const Article = () => {
     },
   ];
 
+  //文章列表管理,统一管理数据
+  const [articleData, setArticleData] = useState({
+    list: [], //文章列表
+    count: 0, //文章数量
+  });
+
+  //文章参数管理
+  const [params, setParams] = useState({
+    page: 1,
+    per_page: 10,
+  });
+
+  // 统一不抽离函数到外面只要涉及到异步请求的函数都放到useEffect内部
+  // 本质区别:写到外面每次组件更新都会重新进行函数初始化这本身就是一次性能消耗
+  // 而写到useEffect中只会在依赖项发生变化的时候函数才会进行重新初始化
+  // 避免性能损失
+  useEffect(() => {
+    const loadList = async () => {
+      const res = await http.get("/mp/articles", { params });
+      console.log(res);
+      const { results, total_count } = res.data;
+      setArticleData({
+        list: results,
+        count: total_count,
+      });
+    };
+    loadList();
+  }, [params]);
+
   return (
     <div>
       {/* 筛选区卡片 */}
@@ -140,10 +180,7 @@ const Article = () => {
           </Form.Item>
 
           <Form.Item label="频道" name="channel_id">
-            <Select
-              placeholder="请选择文章频道"
-              style={{ width: 150 }}
-            >
+            <Select placeholder="请选择文章频道" style={{ width: 150 }}>
               {channelList.map((channel) => (
                 <Option key={channel.id} value={channel.id}>
                   {channel.name}
@@ -166,8 +203,17 @@ const Article = () => {
         </Form>
       </Card>
       {/* 表格区卡片 */}
-      <Card title={`根据筛选条件共查询到 count 条结果：`}>
-        <Table rowKey="id" columns={columns} dataSource={data} />
+      <Card title={`根据筛选条件共查询到${articleData.count}条结果：`}>
+        <Table
+          rowKey="id"
+          columns={columns}
+          dataSource={articleData.list}
+          pagination={{
+            pageSize: params.per_page,
+            total: articleData.count,
+            onChange: pageChange,
+          }}
+        />
       </Card>
     </div>
   );
