@@ -8,6 +8,11 @@ import "./App.css";
 import Login from "@/pages/Login";
 import Layout from "@/pages/Layout";
 
+import { AuthComponent } from "@/components/AuthComponent";
+
+import Publish from "./pages/Publish";
+import Article from "./pages/Article";
+import Home from "./pages/Home";
 
 function App() {
   return (
@@ -16,8 +21,19 @@ function App() {
       <div className="App">
         {/* 创建路由path和组件对应关系 */}
         <Routes>
-          <Route path="/" element={<Layout/>}/>
-          <Route path="/login" element={<Login />} />
+          {/* 需要鉴权的路由 */}
+          <Route path="/" element={
+            <AuthComponent>
+              <Layout />
+            </AuthComponent>
+          }>
+            {/* 二级路由默认页面 */}
+            <Route index path="/" element={<Home />} />
+            <Route path="article" element={<Article />} />
+            <Route path="publish" element={<Publish />} />
+          </Route>
+          {/* 不需要鉴权的路由 */}
+          <Route path='/login' element={<Login />} />
         </Routes>
       </div>
     </BrowserRouter>
