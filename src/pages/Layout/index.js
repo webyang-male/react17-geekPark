@@ -8,7 +8,7 @@ import {
 import "./index.scss";
 
 import { Outlet, useLocation, Link,useNavigate} from "react-router-dom";
-import { observer } from "mobx-react-lite";
+// import { observer } from "mobx-react-lite";
 
 import { useStore } from "../../store/index";
 import { useEffect } from "react";
