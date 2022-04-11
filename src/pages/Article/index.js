@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 
 import { useEffect, useState } from "react";
 import {
@@ -10,6 +10,7 @@ import {
   DatePicker,
   Select,
   message,
+  Popconfirm,
 } from "antd";
 import "moment/locale/zh-cn";
 import locale from "antd/es/date-picker/locale/zh_CN";
@@ -27,7 +28,6 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const Article = () => {
-
   //频道列表数据获取
   const [channelList, setChannelList] = useState([]);
   const loadChannelList = async () => {
@@ -38,7 +38,6 @@ const Article = () => {
   useEffect(() => {
     loadChannelList();
   }, []);
-
 
   //筛选事件
   const onFinish = (values) => {
@@ -63,10 +62,26 @@ const Article = () => {
 
   //分页组件事件
   const pageChange = (page) => {
-      setParams({ ...params, page });
+    setParams({ ...params, page });
   };
 
+  //文章删除
 
+  const delArticle = async (data) => {
+    await http.delete(`/mp/articles/${data.id}`);
+    // //更新列表
+    setParams({
+      page: 1,
+      per_page: 10,
+    });
+    message.success("删除成功!");
+  };
+
+ const navigate = useNavigate();
+  //编辑文章跳转
+  const goPublish = (data) => {
+   navigate(`/publish?id=${data.id}`)
+  }
 
   //列表项
   const columns = [
@@ -112,13 +127,18 @@ const Article = () => {
       render: (data) => {
         return (
           <Space size="middle">
-            <Button type="primary" shape="circle" icon={<EditOutlined />} />
-            <Button
-              type="primary"
-              danger
-              shape="circle"
-              icon={<DeleteOutlined />}
-            />
+            <Button type="primary" shape="circle" icon={<EditOutlined />} onClick={()=>{goPublish(data)}}/>
+            <Popconfirm title="确定删除文章?" okText="Yes" cancelText="No">
+              <Button
+                type="primary"
+                danger
+                shape="circle"
+                icon={<DeleteOutlined />}
+                onClick={() => {
+                  delArticle(data);
+                }}
+              />
+            </Popconfirm>
           </Space>
         );
       },
@@ -207,7 +227,7 @@ const Article = () => {
         <Table
           rowKey="id"
           columns={columns}
-          dataSource={articleData.list}
+          dataSource={articleData.list  }
           pagination={{
             pageSize: params.per_page,
             total: articleData.count,

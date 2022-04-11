@@ -1,0 +1,54 @@
+.publish {
+  position: relative;
+}
+.ant-card-head,
+.ant-card-body {
+  display: flex;
+}
+.ant-upload-list {
+  .ant-upload-list-picture-card-container,
+  .ant-upload-select {
+    width: 146px;
+    height: 146px;
+  }
+}
+
+#content {
+  display: block !important;
+}
+.ql-container .ql-hidden {
+  visibility: hidden;
+  position: absolute;
+  top: -6rem;
+  right: 0;
+}
+
+#root
+  > div
+  > section
+  > section
+  > section
+  > div
+  > div
+  > div.ant-card-body
+  > form
+  > div:nth-child(4)
+  > div
+  > div
+  > div
+  > span
+  > div
+  > div {
+  display: flex;
+  justify-content: center;
+}
+.ant-form-horizontal div:nth-child(3) {
+  padding-left: 9px;
+}
+.ant-form-horizontal div:nth-child(4) {
+  padding-left: 4.3rem;
+}
+#articlePub{
+  position: absolute;
+  bottom: -1.8rem;
+}
