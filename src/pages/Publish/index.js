@@ -48,7 +48,7 @@ const Publish = () => {
         <Form
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 16 }}
-          initialValues={{ type: 1 }}
+          initialValues={{ type: 1, content: "<p>Hello World!</p>" }}
         >
           <Form.Item
             label="标题"
@@ -76,6 +76,7 @@ const Publish = () => {
               </Radio.Group>
             </Form.Item>
           </Form.Item>
+
           <Form.Item>
             <Upload
               name="image"
@@ -88,13 +89,14 @@ const Publish = () => {
               </div>
             </Upload>
           </Form.Item>
+          
+          {/* 这里的富文本内容已经被form.item控制;它的数据内容将会在onFinished中被获取 */}
           <Form.Item
             label="内容"
             name="content"
             rules={[{ required: true, message: "请输入文章内容" }]}
           >
             <ReactQuill
-              style={{ minWidth: "400px", minHeight: "100px" }}
               className="publish-quill"
               theme="snow"
               placeholder="请输入文章内容"

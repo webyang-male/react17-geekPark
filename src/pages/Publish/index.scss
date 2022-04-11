@@ -14,7 +14,12 @@
 }
 
 #content {
-  display: block !important;
+  display: block !important;margin-bottom: 1rem;
+}
+.ql-container{
+  min-width: 500px !important;
+  min-height: 200px !important;
+  
 }
 .ql-container .ql-hidden {
   visibility: hidden;
@@ -46,7 +51,7 @@
   padding-left: 9px;
 }
 .ant-form-horizontal div:nth-child(4) {
-  padding-left: 4.3rem;
+  padding-left: 9.6rem;
 }
 #articlePub{
   position: absolute;
