@@ -81,6 +81,7 @@ const Publish = () => {
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 16 }}
           initialValues={{ type: 1, content: "<p>Hello World!</p>" }}
+          onFinish={(values) => {}}
         >
           <Form.Item
             label="标题"
@@ -124,6 +125,8 @@ const Publish = () => {
                 action="http://geek.itheima.net/v1_0/upload"
                 fileList={fileList}
                 onChange={onUploadChange}
+                maxCount={ imgCount }
+                multiple={ imgCount > 1 }
               >
                 <div style={{ marginTop: 8 }}>
                   <PlusOutlined />
