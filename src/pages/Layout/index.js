@@ -20,12 +20,13 @@ const GeekLayout = () => {
   // 获取当前浏览器上的路径地址
   const selectedLocationKey = location.pathname;
 
-  const { userStore, loginStore } = useStore();
+  const { userStore, loginStore ,channelStore} = useStore();
   userStore.getUserInfo();
   //副作用,调用接口获取用户信息
   useEffect(() => {
     userStore.getUserInfo();
-  }, [userStore]);
+    channelStore.loadChannelList();
+  }, [userStore,channelStore]);
 
 
   //用户退出登陆

@@ -1,6 +1,6 @@
 import { Card, Form, Input, Button, Checkbox, message } from "antd";
 import logo from "@/assets/logo.png";
-import "./index.scss";
+import "./login.scss";
 import { useStore } from "@/store";
 import { useNavigate } from "react-router-dom";
 

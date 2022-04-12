@@ -23,21 +23,15 @@ import img404 from "@/assets/error.png";
 import "./index.scss";
 
 import { http } from "@/utils";
+import { useStore } from "@/store";
+import { observer } from "mobx-react-lite";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const Article = () => {
-  //频道列表数据获取
-  const [channelList, setChannelList] = useState([]);
-  const loadChannelList = async () => {
-    const res = await http.get("/channels"); //获取频道列表
-    setChannelList(res.data.channels);
-  };
-  // console.log(channelList,'channelList');
-  useEffect(() => {
-    loadChannelList();
-  }, []);
+ 
+  const {channelStore} = useStore();
 
   //筛选事件
   const onFinish = (values) => {
@@ -201,9 +195,9 @@ const Article = () => {
 
           <Form.Item label="频道" name="channel_id">
             <Select placeholder="请选择文章频道" style={{ width: 150 }}>
-              {channelList.map((channel) => (
-                <Option key={channel.id} value={channel.id}>
-                  {channel.name}
+              {channelStore.channelList.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
                 </Option>
               ))}
             </Select>
@@ -239,4 +233,4 @@ const Article = () => {
   );
 };
 
-export default Article;
+export default observer(Article);

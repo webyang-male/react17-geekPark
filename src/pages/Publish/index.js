@@ -8,6 +8,7 @@ import {
   Upload,
   Space,
   Select,
+  message
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
@@ -15,10 +16,14 @@ import "./index.scss";
 
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { useStore } from "../../store";
+import { observer } from "mobx-react-lite";
+import { useState } from "react";
 
 const { Option } = Select;
 
 const Publish = () => {
+  //编辑组件link功能bug临时解决方案
   window.addEventListener("load", function () {
     let qllink = document.getElementsByClassName("ql-link");
     let linkEditor = document.getElementsByClassName("ql-hidden")[0];
@@ -32,6 +37,25 @@ const Publish = () => {
       linkEditor.style.visibility = "hidden";
     };
   });
+
+  //频道列表状态数据
+  const { channelStore } = useStore();
+
+  //存放上传图片的数据
+  const [fileList, setFileList] = useState([]);
+  // 上传成功回调
+  const onUploadChange = (info) => {
+    const fileList = info.fileList.map((file) => {
+      if (file.response) {
+        message.success("图片上传成功");
+        return {
+          url: file.response.data.url,
+        };
+      }
+      return file;
+    });
+    setFileList(fileList);
+  };
 
   return (
     <div className="publish">
@@ -63,7 +87,11 @@ const Publish = () => {
             rules={[{ required: true, message: "请选择文章频道" }]}
           >
             <Select placeholder="请选择文章频道" style={{ width: 400 }}>
-              <Option value={0}>推荐</Option>
+              {channelStore.channelList.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
 
@@ -83,13 +111,16 @@ const Publish = () => {
               listType="picture-card"
               className="avatar-uploader"
               showUploadList
+              action="http://geek.itheima.net/v1_0/upload"
+              fileList={fileList}
+              onChange={onUploadChange}
             >
               <div style={{ marginTop: 8 }}>
                 <PlusOutlined />
               </div>
             </Upload>
           </Form.Item>
-          
+
           {/* 这里的富文本内容已经被form.item控制;它的数据内容将会在onFinished中被获取 */}
           <Form.Item
             label="内容"
@@ -121,4 +152,4 @@ const Publish = () => {
   );
 };
 
-export default Publish;
+export default observer(Publish);
