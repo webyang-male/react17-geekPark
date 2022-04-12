@@ -80,7 +80,7 @@ function Home() {
           </Row>
         </div>
       </div>
-      <div style={{ display: "flex", justifyContent: "space-around" }}>
+      <div style={{ display: "flex", justifyContent: "space-around" ,marginTop:"10rem"}}>
         <Bar
           title="主流框架使用人数"
           xData={["Vue", "React", "Angular"]}

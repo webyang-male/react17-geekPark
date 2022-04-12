@@ -18,7 +18,8 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { http } from "../../utils/http";
 
 const { Option } = Select;
 
@@ -41,28 +42,50 @@ const Publish = () => {
   //频道列表状态数据
   const { channelStore } = useStore();
 
+  //使用ref暂存图片列表
+  const cacheImgs = useRef();
   //存放上传图片的数据
   const [fileList, setFileList] = useState([]);
   // 上传成功回调
-  const onUploadChange = (info) => {
-    const fileList = info.fileList.map((file) => {
-      if (file.response) {
-        message.success("图片上传成功");
-        return {
-          url: file.response.data.url,
-        };
-      }
-      return file;
-    });
+  const onUploadChange = ({ fileList }) => {
     setFileList(fileList);
+    //同时存入图片
+    cacheImgs.current = fileList;
   };
 
-  //切换图片
+  //切换图片状态
   const [imgCount, setImgCount] = useState(1);
+
   const radioChange = (e) => {
     // console.log(e);
     const count = e.target.value;
     setImgCount(count);
+
+    //尝试获取并判断是否有图片
+    if (count === 1) {
+      const img = cacheImgs.current ? cacheImgs.current[0] : [];
+      setFileList([img]);
+    } else if (count === 3) {
+      setFileList(cacheImgs.current ? [cacheImgs] : []);
+    }
+  };
+
+  //提交表单
+  let onFinish = async (values) => {
+    console.log(values);
+    const { title, content, channel_id, type } = values;
+    let params = {
+      title,
+      content,
+      channel_id,
+      type,
+      cover: {
+        type,
+        images: fileList.map((item) => item.response.data.url),
+      },
+    };
+    await http.post("/mp/articles?draft=false", params);
+    message.success("发布成功");
   };
 
   return (
@@ -81,7 +104,7 @@ const Publish = () => {
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 16 }}
           initialValues={{ type: 1, content: "<p>Hello World!</p>" }}
-          onFinish={(values) => {}}
+          onFinish={onFinish}
         >
           <Form.Item
             label="标题"
@@ -125,8 +148,8 @@ const Publish = () => {
                 action="http://geek.itheima.net/v1_0/upload"
                 fileList={fileList}
                 onChange={onUploadChange}
-                maxCount={ imgCount }
-                multiple={ imgCount > 1 }
+                maxCount={imgCount}
+                multiple={imgCount > 1}
               >
                 <div style={{ marginTop: 8 }}>
                   <PlusOutlined />
