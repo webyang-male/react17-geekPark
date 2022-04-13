@@ -18,7 +18,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { http } from "../../utils/http";
 
 const { Option } = Select;
@@ -48,8 +48,19 @@ const Publish = () => {
   const [fileList, setFileList] = useState([]);
   // 上传成功回调
   const onUploadChange = ({ fileList }) => {
-    setFileList(fileList);
     //同时存入图片
+    const formatList = fileList.map((file) => {
+      //图片上传完毕执行
+      if (file.response) {
+        return {
+          url: file.response.data.url,
+        };
+      }
+      //否则没上传完毕返回原来的file,不做处理
+      return file;
+    });
+    setFileList(fileList);
+
     cacheImgs.current = fileList;
   };
 
@@ -64,11 +75,18 @@ const Publish = () => {
       type,
       cover: {
         type,
-        images: fileList.map((item) => item.response.data.url),
+        images: fileList.map((item) => item.url
+        ),
       },
     };
-    await http.post("/mp/articles?draft=false", params);
-    message.success("发布成功");
+    if (id) {
+      await http.put(`/mp/articles${id}?draft=false`, params);
+    } else {
+      //新增
+      await http.post("/mp/articles?draft=false", params);
+    }
+
+    message.success(`文章${id ? "更新" : "发布"}成功`);
   };
 
   //切换图片状态
@@ -91,6 +109,29 @@ const Publish = () => {
   //文案适配 根据路由参数id
   const [params] = useSearchParams();
   const id = params.get("id");
+
+  //数据回显 文章已有数据保存
+  const form = useRef(null);
+  useEffect(() => {
+    let getArticle = async () => {
+      const res = await http.get(`/mp/articles/${id}`);
+      const { cover, ...formValue } = res.data;
+      // 动态设置表单数据
+      form.current.setFieldsValue({ ...formValue, type: cover.type });
+
+      const formatImgsList = res.data.cover.images.map((url) => ({ url }));
+      //调用setFileList方法回填图片
+      setFileList(formatImgsList);
+
+      //暂存图片数据
+      cacheImgs.current = formatImgsList;
+    };
+
+    if (id) {
+      // 拉取数据回显
+      getArticle();
+    }
+  }, [id]);
 
   return (
     <div className="publish">
@@ -183,7 +224,7 @@ const Publish = () => {
                 htmlType="submit"
                 id="articlePub"
               >
-                {id?`更新`:`发布`}文章
+                {id ? `更新` : `发布`}文章
               </Button>
             </Space>
           </Form.Item>

@@ -22,10 +22,10 @@ function VisitorCount({ style }) {
       }
       const categoryData = [];
       const valueData = [];
+      const timeFn =
+        echarts.format.formatTime || echarts.time.format.formatTime;
       for (let i = 0; i < count; i++) {
-        categoryData.push(
-          echarts.time.format.formatTime("yyyy-MM-dd\nhh:mm:ss", time, false)
-        );
+        categoryData.push(timeFn("yyyy-MM-dd\nhh:mm:ss", time, false));
         valueData.push(next(i).toFixed(2));
         time += 1000;
       }
@@ -42,16 +42,16 @@ function VisitorCount({ style }) {
         text: echarts.format.addCommas(dataCount) + " 人次",
         left: 10,
       },
-    //   toolbox: {
-    //     feature: {
-    //       dataZoom: {
-    //         yAxisIndex: false,
-    //       },
-    //       saveAsImage: {
-    //         pixelRatio: 2,
-    //       },
-    //     },
-    //   },
+      //   toolbox: {
+      //     feature: {
+      //       dataZoom: {
+      //         yAxisIndex: false,
+      //       },
+      //       saveAsImage: {
+      //         pixelRatio: 2,
+      //       },
+      //     },
+      //   },
       tooltip: {
         trigger: "axis",
         axisPointer: {
@@ -61,14 +61,14 @@ function VisitorCount({ style }) {
       grid: {
         bottom: 20,
       },
-    //   dataZoom: [
-    //     {
-    //       type: "inside",
-    //     },
-    //     {
-    //       type: "slider",
-    //     },
-    //   ],
+      //   dataZoom: [
+      //     {
+      //       type: "inside",
+      //     },
+      //     {
+      //       type: "slider",
+      //     },
+      //   ],
       xAxis: {
         data: data.categoryData,
         silent: false,
@@ -88,7 +88,7 @@ function VisitorCount({ style }) {
         {
           type: "bar",
           data: data.valueData,
-          color: 'rgb(46,49,124)',
+          color: "rgb(46,49,124)",
           // Set `large` for large data amount
           large: true,
         },
