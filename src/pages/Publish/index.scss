@@ -1,63 +1,27 @@
-.publish {
-  position: relative;
+#publishContainer .ant-card-head {
+  display: flex !important;
 }
-.publish .ant-card-head,
-.publish  .ant-card-body {
-  display: flex;
-}
-.ant-upload-list {
-  .ant-upload-list-picture-card-container,
-  .ant-upload-select {
-    width: 146px;
-    height: 146px;
-  }
+#publishContainer .ant-card-body {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 #content {
-  display: block !important;margin-bottom: 1rem;
+  display: block !important;
+  margin-bottom: 1rem;
 }
-.ql-container{
-  min-width: 500px !important;
-  min-height: 200px !important;
-  
+#content .ql-toolbar {
+  min-width: 25rem;
 }
-.ql-container .ql-hidden {
-  visibility: hidden;
-  position: absolute;
-  top: -6rem;
-  right: 0;
+#content .ql-container  {
+  min-width: 25rem;
 }
-
-#root
-  > div
-  > section
-  > section
-  > section
-  > div
-  > div
-  > div.ant-card-body
-  > form
-  > div:nth-child(4)
-  > div
-  > div
-  > div
-  > span
-  > div
-  > div {
-  display: flex;
-  justify-content: center;
+#articleTitleInput{
+  margin-left: 7.5%;
+  max-width: 73%;
 }
-.ant-form-horizontal div:nth-child(3) {
-  padding-left: 9px;
-}
-.ant-form-horizontal div:nth-child(4) {
-  padding-left: 9.6rem;
-}
-#articlePub{
-  position: absolute;
-  bottom: -1.8rem;
-}
-.ant-select-item:hover{
-  background-color: rgb(0 120 231) !important;
-  color: #fff !important;
+#publicArticleBtn{
+  margin-left: -20%;
 }

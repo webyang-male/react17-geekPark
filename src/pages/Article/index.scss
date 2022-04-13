@@ -1,3 +1,14 @@
-.ant-form div {
+#articleFilter .ant-card-head{
   display: flex !important;
+}
+#articleFilter .ant-card-body{
+  display: flex !important;
+}
+#articleFilter > div.ant-card-body > form > div:nth-child(1) > div.ant-col.ant-form-item-control > div > div{
+  position: relative;
+  left: 3.5%;
+}
+#articleFilter > div.ant-card-body > form > div:nth-child(2) > div.ant-col.ant-form-item-control > div > div > div{
+  position: relative;
+  left: -27.6%;
 }

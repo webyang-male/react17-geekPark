@@ -169,9 +169,10 @@ const Article = () => {
   }, [params]);
 
   return (
-    <div>
+    <div id="articleContainer">
       {/* 筛选区卡片 */}
       <Card
+      id="articleFilter"
         title={
           <Breadcrumb separator=">">
             <Breadcrumb.Item>
@@ -194,7 +195,7 @@ const Article = () => {
           </Form.Item>
 
           <Form.Item label="频道" name="channel_id">
-            <Select placeholder="请选择文章频道" style={{ width: 150 }}>
+            <Select id="channelList" placeholder="请选择文章频道" style={{ width: 150}}>
               {channelStore.channelList.map((item) => (
                 <Option key={item.id} value={item.id}>
                   {item.name}

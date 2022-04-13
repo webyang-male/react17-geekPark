@@ -11,7 +11,7 @@ import {
   message,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import "./index.scss";
 
 import ReactQuill from "react-quill";
@@ -43,7 +43,7 @@ const Publish = () => {
   const { channelStore } = useStore();
 
   //使用ref暂存图片列表
-  const cacheImgs = useRef();
+  const cacheImgs = useRef([]);
   //存放上传图片的数据
   const [fileList, setFileList] = useState([]);
   // 上传成功回调
@@ -52,6 +52,7 @@ const Publish = () => {
     const formatList = fileList.map((file) => {
       //图片上传完毕执行
       if (file.response) {
+        message.success("图片上传成功");
         return {
           url: file.response.data.url,
         };
@@ -59,12 +60,12 @@ const Publish = () => {
       //否则没上传完毕返回原来的file,不做处理
       return file;
     });
-    setFileList(fileList);
-
-    cacheImgs.current = fileList;
+    setFileList(formatList);
+    cacheImgs.current = formatList;
   };
 
   //提交表单
+  const navigate = useNavigate();
   let onFinish = async (values) => {
     console.log(values);
     const { title, content, channel_id, type } = values;
@@ -75,17 +76,17 @@ const Publish = () => {
       type,
       cover: {
         type,
-        images: fileList.map((item) => item.url
-        ),
+        images: fileList.map((item) => item.url),
       },
     };
     if (id) {
-      await http.put(`/mp/articles${id}?draft=false`, params);
+      await http.put(`/mp/articles/${id}?draft=false`, params);
     } else {
       //新增
       await http.post("/mp/articles?draft=false", params);
     }
 
+    navigate("/article");
     message.success(`文章${id ? "更新" : "发布"}成功`);
   };
 
@@ -111,7 +112,7 @@ const Publish = () => {
   const id = params.get("id");
 
   //数据回显 文章已有数据保存
-  const form = useRef(null);
+  const [form] = Form.useForm();
   useEffect(() => {
     let getArticle = async () => {
       const res = await http.get(`/mp/articles/${id}`);
@@ -131,7 +132,7 @@ const Publish = () => {
       // 拉取数据回显
       getArticle();
     }
-  }, [id]);
+  }, [id, form]);
 
   return (
     <div className="publish">
@@ -150,6 +151,7 @@ const Publish = () => {
           wrapperCol={{ span: 16 }}
           initialValues={{ type: 1, content: "<p>Hello World!</p>" }}
           onFinish={onFinish}
+          ref={form}
         >
           <Form.Item
             label="标题"
