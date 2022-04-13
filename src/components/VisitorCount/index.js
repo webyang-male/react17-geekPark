@@ -24,7 +24,7 @@ function VisitorCount({ style }) {
       const valueData = [];
       for (let i = 0; i < count; i++) {
         categoryData.push(
-          echarts.format.formatTime("yyyy-MM-dd\nhh:mm:ss", time, false)
+          echarts.time.format.formatTime("yyyy-MM-dd\nhh:mm:ss", time, false)
         );
         valueData.push(next(i).toFixed(2));
         time += 1000;

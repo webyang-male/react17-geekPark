@@ -68,7 +68,7 @@ const Article = () => {
       page: 1,
       per_page: 10,
     });
-    message.success("删除成功!");
+    message.success("文章删除成功!");
   };
 
  const navigate = useNavigate();

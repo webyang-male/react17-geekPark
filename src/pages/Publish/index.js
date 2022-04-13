@@ -11,7 +11,7 @@ import {
   message,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import "./index.scss";
 
 import ReactQuill from "react-quill";
@@ -53,23 +53,6 @@ const Publish = () => {
     cacheImgs.current = fileList;
   };
 
-  //切换图片状态
-  const [imgCount, setImgCount] = useState(1);
-
-  const radioChange = (e) => {
-    // console.log(e);
-    const count = e.target.value;
-    setImgCount(count);
-
-    //尝试获取并判断是否有图片
-    if (count === 1) {
-      const img = cacheImgs.current ? cacheImgs.current[0] : [];
-      setFileList([img]);
-    } else if (count === 3) {
-      setFileList(cacheImgs.current ? [cacheImgs] : []);
-    }
-  };
-
   //提交表单
   let onFinish = async (values) => {
     console.log(values);
@@ -88,6 +71,27 @@ const Publish = () => {
     message.success("发布成功");
   };
 
+  //切换图片状态
+  const [imgCount, setImgCount] = useState(1);
+
+  const radioChange = (e) => {
+    // console.log(e);
+    const count = e.target.value;
+    setImgCount(count);
+
+    //尝试获取并判断是否有图片
+    if (count === 1) {
+      const img = cacheImgs.current ? cacheImgs.current[0] : [];
+      setFileList([img]);
+    } else if (count === 3) {
+      setFileList(cacheImgs.current ? [cacheImgs] : []);
+    }
+  };
+
+  //文案适配 根据路由参数id
+  const [params] = useSearchParams();
+  const id = params.get("id");
+
   return (
     <div className="publish">
       <Card
@@ -96,7 +100,7 @@ const Publish = () => {
             <Breadcrumb.Item>
               <Link to="/home">首页</Link>
             </Breadcrumb.Item>
-            <Breadcrumb.Item>发布文章</Breadcrumb.Item>
+            <Breadcrumb.Item>{id ? `编辑` : "发布"}文章</Breadcrumb.Item>
           </Breadcrumb>
         }
       >
@@ -179,7 +183,7 @@ const Publish = () => {
                 htmlType="submit"
                 id="articlePub"
               >
-                发布文章
+                {id?`更新`:`发布`}文章
               </Button>
             </Space>
           </Form.Item>
