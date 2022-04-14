@@ -6,6 +6,8 @@ function RaceChart({ style, yData, title }) {
 
   let chartInit = () => {
     const myChart = echarts.init(RacechartdomRef.current);
+
+   
     var data = [];
     for (let i = 0; i < 5; ++i) {
       data.push(Math.round(Math.random() * 200));
@@ -59,9 +61,15 @@ function RaceChart({ style, yData, title }) {
       }
       myChart.setOption(option);
     }
+
     setInterval(function () {
       update();
     }, 3000);
+
+    if (myChart != null && undefined) {
+      myChart.dispose(); //销毁
+    }
+
   };
 
   // 初始化echarts实例
@@ -72,7 +80,7 @@ function RaceChart({ style, yData, title }) {
   return (
     //   准备一个dom元素
     <>
-      <div ref={RacechartdomRef} style={style}></div>
+      <div ref={RacechartdomRef} style={style} id="raceChart"></div>
     </>
   );
 }

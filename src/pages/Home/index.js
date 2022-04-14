@@ -1,7 +1,9 @@
 // echarts组件图
 import Bar from "@/components/Bar/index.js";
-import RaceChart from "@/components/RaceChart.js";
+// import RaceChart from "@/components/RaceChart.js";
 import VisitorCount from "@/components/VisitorCount/index.js";
+
+import { Skeleton } from "antd";
 
 import { Statistic, Card, Col, Row } from "antd";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
@@ -80,7 +82,13 @@ function Home() {
           </Row>
         </div>
       </div>
-      <div style={{ display: "flex", justifyContent: "space-around" ,marginTop:"10rem"}}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          marginTop: "10rem",
+        }}
+      >
         <Bar
           title="主流框架使用人数"
           xData={["Vue", "React", "Angular"]}
@@ -89,10 +97,14 @@ function Home() {
           color={"#91cc75"}
         />
         <Pai style={{ width: "550px", height: "350px" }} />
-        <RaceChart
-          style={{ width: "550px", height: "350px" }}
-          yData={["博客园", "CSDN", "掘金", "开源中国", "极客园"]}
-        />
+        <div id="chartsThree">
+          <Skeleton
+            active
+            paragraph={{ rows: 8 }}
+            style={{ width: "450px" }}
+            id="skeleton"
+          />
+        </div>
       </div>
     </>
   );

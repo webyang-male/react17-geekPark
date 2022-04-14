@@ -7,7 +7,7 @@ const mockData = [];
 for (let i = 0; i < 20; i++) {
   mockData.push({
     key: i.toString(),
-    title: `content${i + 1}`,
+    title: `事项${i + 1}`,
     description: `description of content${i + 1}`,
   });
 }
@@ -40,7 +40,7 @@ const TodoList = () => {
   return (
     <Transfer
       dataSource={mockData}
-      titles={["Source", "Target"]}
+      titles={["已处理", "待处理"]}
       targetKeys={targetKeys}
       selectedKeys={selectedKeys}
       onChange={onChange}

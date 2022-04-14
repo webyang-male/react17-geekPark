@@ -1,7 +1,7 @@
-#publishContainer .ant-card-head {
+.publish .ant-card-head {
   display: flex !important;
 }
-#publishContainer .ant-card-body {
+.publish .ant-card-body {
   display: flex !important;
   flex-direction: column;
   justify-content: flex-start;
@@ -18,10 +18,13 @@
 #content .ql-container  {
   min-width: 25rem;
 }
-#articleTitleInput{
-  margin-left: 7.5%;
-  max-width: 73%;
-}
-#publicArticleBtn{
-  margin-left: -20%;
+// #articleTitleInput{
+//   margin-left: 7.5%;
+//   max-width: 73%;
+// }
+// #publicArticleBtn{
+//   margin-left: -20%;
+// }
+#root > div > section > section > section > div > div > div.ant-card-body > form > div:nth-child(4){
+  margin-left: 28%;
 }
