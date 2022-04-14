@@ -41,8 +41,9 @@ const GeekLayout = () => {
   return (
     <Layout>
       <Header className="header">
-        <div className="logo" />
+        <div className="logo" ><em>极客园</em></div>
         <div className="user-info">
+          {/* <img className="user-avator" src={userStore.userInfo.photo} alt="admin" title="超级管理员"/> */}
           <span className="user-name">{userStore.userInfo.name}</span>
           <span className="user-logout">
             <Popconfirm
