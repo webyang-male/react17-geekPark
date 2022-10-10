@@ -1,3 +1,8 @@
+# geekPark
+## 简介
+react极客园项目，基于`create-react-app`，主要技术栈为react17 + hooks + mobx
+
+
 ## 测试效果登陆
 账号为11位手机号格式 验证码必须是：246810
 
